@@ -10,13 +10,14 @@ function dataLoader (props, onData) {
   }, (err, httpResponse, body) => {
     if (body) {
       body = JSON.parse(body)
-      const notes = body.map(a => {
+      const messages = body.map(a => {
         const b = a
         b.date_created = moment(a.date_created)
         return b
       })
-      onData(null, { notes, handleUpdate: props.handleUpdate, handleDelete: props.handleDelete })
+      onData(null, { messages, handleUpdate: props.handleUpdate, handleDelete: props.handleDelete })
     }
+    onData(null, { messages: [] })
   })
 }
 

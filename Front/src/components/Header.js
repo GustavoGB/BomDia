@@ -9,14 +9,14 @@ class Header extends Component {
         <div className='row'>
           <div className='col-8'>
             <div className='content'>
-              <i className='fa fa-sticky-note-o' aria-hidden='true' />
-              <h1>Notas</h1>
+              <i className='fa fa-comment-o' aria-hidden='true' />
+              <h1>Mensagens</h1>
             </div>
           </div>
           <div className='col-4'>
             <button type='button' className='btn btn-outline-primary float-right'
               onClick={this.props.newNoteClick}>
-              <i className='fa fa-plus' aria-hidden='true' /> Nova nota
+              <i className='fa fa-plus' aria-hidden='true' /> Nova mensagem
     	    	</button>
           </div>
         </div>

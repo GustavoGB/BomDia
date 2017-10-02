@@ -17,3 +17,29 @@
 .card-time i {
     margin-right: 5px;
 }
+
+.message-container {
+    padding: 1em;
+    border: 1px solid grey;
+    border-radius: 0.5em;
+    position: relative;
+}
+
+.message-hour {
+    display: inline-block;
+}
+
+.message-content {
+    width: 90%;
+}
+
+.message-status {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 1em;
+    font-size: 2em;
+    display: flex;
+    align-items: center;
+    color: #1989FB;
+}

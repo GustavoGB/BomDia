@@ -34,13 +34,14 @@ class App extends Component {
     return (
       <div className='app-container'>
         <Navbar color='primary' >
-          <NavbarBrand href='/' style={{color: 'white'}}>Keepy</NavbarBrand>
+          <NavbarBrand href='/' style={{color: 'white'}}>Bom Dia Grupo</NavbarBrand>
         </Navbar>
 
         <Container>
-          { this.state.userId
-          ? <Home userId={this.state.userId} />
-          : <Login handleLogin={this.handleLogin} invalidLogin={this.state.invalidLogin} />
+          {/* { this.state.userId */}
+          {/* ? <Home userId={this.state.userId} /> */}
+          <Home userId={1} />
+          {/* : <Login handleLogin={this.handleLogin} invalidLogin={this.state.invalidLogin} /> */}
         }
         </Container>
 

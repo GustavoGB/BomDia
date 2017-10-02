@@ -9,14 +9,31 @@ class NotesList extends Component {
     console.log(props)
   }
   render () {
-    if (this.props.notes.length === 0) {
-      return (<h4>Nenhuma nota encontrada </h4>)
-    }
+    // if (this.props.messages.length === 0) {
+    //   return (<h4>Nenhuma nota encontrada </h4>)
+    // }
 
     return (
       <Row>
-        {this.props.notes.map(note => (
-          <Col xs={6} sm={4} key={note.id}>
+        <Col xs={12}>
+          <div className='message-container'>
+            <div className='message-hour'>
+              <i className='fa fa-clock-o' aria-hidden='true' /> 9h30
+            </div>
+
+            <p className='message-content'>
+              Bom dia flor do dia! Que seu dia seja regado de notícias boas. Deus é fiel.
+            </p>
+
+            <div className='message-status'>
+              <i className='fa fa-check-square' aria-hidden='true' />
+            </div>
+
+          </div>
+        </Col>
+
+        {this.props.messages.map(note => (
+          <Col xs={12} key={note.id}>
             <Card>
               <CardBlock>
                 <CardTitle>{note.title}</CardTitle>
@@ -50,7 +67,7 @@ class NotesList extends Component {
 export default NotesList
 
 NotesList.propTypes = {
-  notes: PropTypes.array,
+  messages: PropTypes.array,
   handleUpdate: PropTypes.func,
   handleDelete: PropTypes.func
 }
