@@ -50,7 +50,7 @@ local.properties
 
 .idea/
 .vscode/
-/Front/node_modules/
+/Front/node_modules.nosync/
 build
 .DS_Store
 *.tgz
