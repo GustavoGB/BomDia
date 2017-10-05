@@ -16,6 +16,8 @@ class App extends Component {
     this.handleLogin = this.handleLogin.bind(this)
   }
   handleLogin (form) {
+    console.log(form)
+    
     req.post({
       url: 'http://localhost:8080/Keepy/check-user',
       form
@@ -38,11 +40,10 @@ class App extends Component {
         </Navbar>
 
         <Container>
-          {/* { this.state.userId */}
-          {/* ? <Home userId={this.state.userId} /> */}
-          <Home userId={1} />
-          {/* : <Login handleLogin={this.handleLogin} invalidLogin={this.state.invalidLogin} /> */}
-        }
+          { this.state.userId
+            ? <Home userId={this.state.userId} />
+          : <Login handleLogin={this.handleLogin} invalidLogin={this.state.invalidLogin} />
+          }
         </Container>
 
       </div>
