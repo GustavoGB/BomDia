@@ -8,7 +8,7 @@ public class User {
 	private String name;
 	
 	public Integer getId() {return id;}
-	public void setID(Integer id) {this.id = id;}
+	public void setId(Integer id) {this.id = id;}
 
 	public String getPhone() {return phone;}
 	public void setPhone(String phone) {this.phone = phone;}
@@ -24,3 +24,4 @@ public class User {
 
 	
 }
+
