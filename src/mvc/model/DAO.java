@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DAO {
 	private Connection connection = null;
@@ -32,6 +34,31 @@ public class DAO {
 		} catch (SQLException e) {e.printStackTrace();}
 	}
 	
+	public User get(User user) {
+		String sql = "SELECT * from User WHERE phone=? AND password=?";
+		PreparedStatement stmt;
+		User queryUser = new User();
+		
+		try {
+			stmt = connection.prepareStatement(sql);
+			stmt.setString(1, user.getPhone());
+			stmt.setString(2, user.getPassword());
+			
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				queryUser.setId(rs.getInt("id"));
+				queryUser.setPhone(rs.getString("phone"));
+			}
+			rs.close();
+			stmt.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return queryUser;
+	}
+	
 	public void addMessage(Message message){
 		try {
 			String sql = "INSERT INTO Message (user_id, content, towhom, hour, is_active, is_deleted), values(?,?,?,?,?,?)";
@@ -48,6 +75,29 @@ public class DAO {
 		} catch (SQLException e) {e.printStackTrace();}
 	}
 	
+	public void removeMessage(Message message) {
+		 try {
+		 PreparedStatement stmt = connection.prepareStatement("DELETE FROM Message WHERE id=?");
+		 stmt.setInt(1, message.getId());
+		 stmt.execute();
+		 stmt.close();
+		 } catch(SQLException e) {System.out.println(e);}
+	}
+	
+	public void altera(Message message) {
+		 try {
+			 String sql = "UPDATE Message SET content=?, towhom=?, is_active=?, is_deleted=? WHERE id=?";
+			 PreparedStatement stmt = connection.prepareStatement(sql);
+			 stmt.setString(1, message.getContent());
+			 stmt.setString(2, message.getToWhom());
+			 stmt.setInt(3, message.getIsActive());
+			 stmt.setInt(4, message.getIsDeleted());
+			 
+			 stmt.executeUpdate();
+			 stmt.close();
+			 } catch(SQLException e) {System.out.println(e);}
+	}
+	
 	public List<Message> getList(User user) {
 		 List<Message> messages = new ArrayList<Message>();
 		 try {
@@ -55,7 +105,7 @@ public class DAO {
 			 ResultSet rs = stmt.executeQuery();
 		 while (rs.next()) {
 			 Message message = new Message();
-			 message.setId(rs.getLong("id"));
+			 message.setId(rs.getInt("id"));
 			 message.setContent(rs.getString("content"));
 			 message.setToWhom(rs.getString("towhom"));
 			 message.setHour(rs.getInt("hour"));
@@ -71,15 +121,11 @@ public class DAO {
 		 return messages;
 	}
 	
-	public void removeMessage(Message message) {
-		try {
-			 PreparedStatement stmt =
-	connection.prepareStatement("DELETE FROM Tarefa WHERE id=?");
-			 stmt.setLong(1, tarefa.getId());
-			 stmt.execute();
-			 stmt.close();
+	public void close() {
+	 	  try { connection.close();}
+	 	  catch (SQLException e) {e.printStackTrace();}
 	}
-	
+		
 }	
 
 
