@@ -36,12 +36,12 @@ public class DAO {
 		try {
 			String sql = "INSERT INTO Message (user_id, content, towhom, hour, is_active, is_deleted), values(?,?,?,?,?,?)";
 			PreparedStatement stmt = connection.prepareStatement(sql);
-			stmt.setString(1, message.getUserId());
+			stmt.setInt(1, message.getUserId());
 			stmt.setString(2, message.getContent());
 			stmt.setString(3,message.getToWhom());
-			stmt.setString(4,message.getHour());
-			stmt.setString(5, message.getIsActive());
-			stmt.setString(6, message.getIsDeleted());
+			stmt.setInt(4,message.getHour());
+			stmt.setInt(5, message.getIsActive());
+			stmt.setInt(6, message.getIsDeleted());
 					
 			stmt.execute();
 			stmt.close();
