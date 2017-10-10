@@ -84,7 +84,7 @@ public class DAO {
 		 } catch(SQLException e) {System.out.println(e);}
 	}
 	
-	public void altera(Message message) {
+	public void alteraMessage(Message message) {
 		 try {
 			 String sql = "UPDATE Message SET content=?, towhom=?, is_active=?, is_deleted=? WHERE id=?";
 			 PreparedStatement stmt = connection.prepareStatement(sql);
@@ -101,7 +101,7 @@ public class DAO {
 	public List<Message> getList(User user) {
 		 List<Message> messages = new ArrayList<Message>();
 		 try {
-			 PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Message WHERE id="+ user.getId());
+			 PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Message WHERE user_id="+ user.getId());
 			 ResultSet rs = stmt.executeQuery();
 		 while (rs.next()) {
 			 Message message = new Message();
@@ -120,6 +120,59 @@ public class DAO {
 		 } catch(SQLException e) {System.out.println(e);}
 		 return messages;
 	}
+	
+	public List<Message> getList(Message message) {
+		 List<Message> messages = new ArrayList<Message>();
+		 try {
+			 PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Message WHERE hour="+ message.getHour());
+			 ResultSet rs = stmt.executeQuery();
+		 while (rs.next()) {
+			 
+			 Message message1 = new Message();
+			 message1.setId(rs.getInt("id"));
+			 message1.setContent(rs.getString("content"));
+			 message1.setToWhom(rs.getString("towhom"));
+			 message1.setHour(rs.getInt("hour"));
+			 message1.setIsActive(rs.getInt("is_active"));
+			 message1.setIsDeleted(rs.getInt("is_deleted"));
+
+		
+		 messages.add(message1);
+			  
+	
+		 }
+		 rs.close();
+		 stmt.close();
+		 } catch(SQLException e) {System.out.println(e);}
+		 return messages;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	
+	
 	
 	public void close() {
 	 	  try { connection.close();}
