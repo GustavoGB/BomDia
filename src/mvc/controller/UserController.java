@@ -6,6 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import
 org.springframework.web.bind.annotation.RequestMapping;
@@ -17,21 +18,21 @@ import org.springframework.web.util.UriComponentsBuilder;
 import mvc.model.User;
 
 @RestController
+@CrossOrigin
 @RequestMapping(value = "/user")
 public class UserController {
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<User> get() {
 
         User user = new User();
-        user.setName("Lelo");
+        user.setName("Lel22222o");
         user.setPhone("1197069512");
         user.setPassword("123456");
         return new ResponseEntity<User>(user, HttpStatus.OK);
     }
     
-    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<User> update(@RequestBody User user) {
-    	System.out.println("Chamado");
         if (user != null) {
             user.setID(1);
         }
@@ -40,16 +41,4 @@ public class UserController {
         
         return new ResponseEntity<User>(user, HttpStatus.OK);
     }
-    
-//    @RequestMapping(value = "/user", method = RequestMethod.POST)
-//    public ResponseEntity<?> createUser(@RequestBody User user, UriComponentsBuilder ucBuilder) {
-//        System.out.println(user.getName());
-//        System.out.println(user.getId());
-//         
-////        userService.saveUser(user);
-// 
-//        HttpHeaders headers = new HttpHeaders();
-////        headers.setLocation(ucBuilder.path("/api/user/{id}").buildAndExpand(user.getId()).toUri());
-//        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
-//    }
 }
