@@ -33,7 +33,7 @@ public class UserController {
     public ResponseEntity<User> update(@RequestBody User user) {
     	System.out.println("Chamado");
         if (user != null) {
-            user.setID(1);
+            user.setId(1);
         }
 
         // TODO: call persistence layer to update
