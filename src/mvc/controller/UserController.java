@@ -17,34 +17,39 @@ import org.springframework.web.util.UriComponentsBuilder;
 import mvc.model.User;
 
 @RestController
+@RequestMapping(value = "/user")
 public class UserController {
-//    @RequestMapping("/user")
-//    public String execute() {
-//        System.out.println("Lógica do MVC");
-//        
-//     // Response with new note created
-//     		JSONObject noteJson = new JSONObject();
-//     		noteJson.put("username", "marcelo");
-//     		noteJson.put("password", "elisa");
-//
-//     		StringWriter out = new StringWriter();
-//     		noteJson.write(out);
-//     		String jsonText = out.toString();
-//     		
-//     		System.out.println(jsonText);
-//        
-//        return "info";
-//    }
-    
-    @RequestMapping(value = "/user", method = RequestMethod.POST)
-    public ResponseEntity<?> createUser(@RequestBody User user, UriComponentsBuilder ucBuilder) {
-        System.out.println(user.getName());
-        System.out.println(user.getId());
-         
-//        userService.saveUser(user);
- 
-        HttpHeaders headers = new HttpHeaders();
-//        headers.setLocation(ucBuilder.path("/api/user/{id}").buildAndExpand(user.getId()).toUri());
-        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public ResponseEntity<User> get() {
+
+        User user = new User();
+        user.setName("Lelo");
+        user.setPhone("1197069512");
+        user.setPassword("123456");
+        return new ResponseEntity<User>(user, HttpStatus.OK);
     }
+    
+    @RequestMapping(value = "/", method = RequestMethod.POST)
+    public ResponseEntity<User> update(@RequestBody User user) {
+    	System.out.println("Chamado");
+        if (user != null) {
+            user.setID(1);
+        }
+
+        // TODO: call persistence layer to update
+        
+        return new ResponseEntity<User>(user, HttpStatus.OK);
+    }
+    
+//    @RequestMapping(value = "/user", method = RequestMethod.POST)
+//    public ResponseEntity<?> createUser(@RequestBody User user, UriComponentsBuilder ucBuilder) {
+//        System.out.println(user.getName());
+//        System.out.println(user.getId());
+//         
+////        userService.saveUser(user);
+// 
+//        HttpHeaders headers = new HttpHeaders();
+////        headers.setLocation(ucBuilder.path("/api/user/{id}").buildAndExpand(user.getId()).toUri());
+//        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+//    }
 }
