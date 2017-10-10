@@ -53,3 +53,8 @@ body {
 .invalid i {
     margin-right: 10px;
 }
+
+.form-signin .text-muted:hover {
+    font-size: 1.1em;
+    cursor: pointer;
+}
