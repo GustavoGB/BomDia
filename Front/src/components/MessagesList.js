@@ -37,10 +37,10 @@ class MessagesList extends Component {
                 </div>
 
                 <div className='btn-group btn-group-sm' role='group' aria-label='Basic example'>
-                  <Button color='secondary' onClick={() => this.props.handleUpdate()}>
+                  <Button color='secondary' onClick={() => this.props.handleUpdate(message)}>
                     <i className='fa fa-pencil' aria-hidden='true' />
                   </Button>
-                  <Button color='danger' onClick={() => this.props.handleDelete()}>
+                  <Button color='danger' onClick={() => this.props.handleDelete(message)}>
                     <i className='fa fa-trash-o' aria-hidden='true' />
                   </Button>
                 </div>

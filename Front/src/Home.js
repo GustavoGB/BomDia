@@ -91,7 +91,8 @@ class Home extends Component {
     }
 
     if (isUpdating) {
-      form.id = this.state.note.id
+      form.id = this.state.message.id
+      form.isDeleted = 0
       url = routes.postMessage + '/' + form.id
     }
 
@@ -103,6 +104,9 @@ class Home extends Component {
       isActive: true,
       gifTag: ''
     }
+
+    console.log(form)
+    
 
     req.post({
       url,
@@ -117,14 +121,17 @@ class Home extends Component {
     })
   }
 
-  handleUpdate (note) {
-    const { title, id, description } = note
+  handleUpdate (message) {
+    const { content, id, toWhom, isActive, hour } = message
+
     this.setState({
       showMessageModal: true,
-      note: {
-        title,
-        id,
-        description
+      message: {
+        content,
+        toWhom,
+        isActive,
+        hour,
+        id
       }
     })
   }
@@ -236,7 +243,9 @@ class Home extends Component {
           </ModalBody>
           <ModalFooter>
             <Button color='secondary' onClick={this.toggleMessageClick}>Cancelar</Button>
-            <Button color='success' onClick={this.handleMessageRequest}>Criar Bom Dia</Button>
+            <Button color='success' onClick={this.handleMessageRequest}>
+              {this.state.message.id ? 'Atualizar Bom Dia' : 'Criar Bom Dia'}
+            </Button>
           </ModalFooter>
         </Modal>
 

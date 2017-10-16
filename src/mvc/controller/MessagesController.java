@@ -32,7 +32,7 @@ public class MessagesController {
     }
     
     @RequestMapping(method = RequestMethod.POST)
-    public String update(@RequestBody Message msg) {
+    public String create(@RequestBody Message msg) {
     	mvc.model.DAO dao = new DAO();
     	
     	if (msg.getGifTag() != null) {
@@ -43,4 +43,20 @@ public class MessagesController {
     	dao.addMessage(msg);
         return "{\"ok\":true}";
     }
+    
+    @RequestMapping(method = RequestMethod.POST, value="/{messageId}" )
+    public String update(@RequestBody Message msg) {
+    	mvc.model.DAO dao = new DAO();
+    	
+    	if (msg.getGifTag() != null) {
+
+    		String gifUrl = new GifController().Random(msg.getGifTag());
+    		msg.setContent(msg.getContent() + " " + gifUrl);
+    	};
+    	
+    	dao.alteraMessage(msg);
+        return "{\"ok\":true}";
+    }
+    
+    
 }

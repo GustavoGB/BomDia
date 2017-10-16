@@ -94,13 +94,14 @@ public class DAO {
 	
 	public void alteraMessage(Message message) {
 		 try {
-			 String sql = "UPDATE Message SET content=?, towhom=?, is_active=?, is_deleted=? WHERE id=?";
+			 String sql = "UPDATE Message SET content=?, towhom=?, hour=?, is_active=?, is_deleted=? WHERE id=?";
 			 PreparedStatement stmt = connection.prepareStatement(sql);
 			 stmt.setString(1, message.getContent());
 			 stmt.setString(2, message.getToWhom());
-			 stmt.setInt(3, message.getIsActive());
-			 stmt.setInt(4, message.getIsDeleted());
-			 
+			 stmt.setInt(3, message.getHour());
+			 stmt.setInt(4, message.getIsActive());
+			 stmt.setInt(5, message.getIsDeleted());
+			 stmt.setInt(6,  message.getId());
 			 stmt.executeUpdate();
 			 stmt.close();
 			 } catch(SQLException e) {System.out.println(e);}
