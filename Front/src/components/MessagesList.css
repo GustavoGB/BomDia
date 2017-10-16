@@ -35,11 +35,24 @@
 
 .message-status {
     position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 1em;
+    top: 0.5em;
+    right: 0.5em;
     font-size: 2em;
     display: flex;
     align-items: center;
-    color: #1989FB;
+    color: #30A54A;
+}
+
+.message-footer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.message-footer .light {
+    font-weight: 300;
+    margin-right: 5px;
+}
+
+.message-footer .to {
+    font-weight: bold;
 }

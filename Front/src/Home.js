@@ -1,19 +1,37 @@
 import React, { Component } from 'react'
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, Label, Input } from 'reactstrap'
+import {
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  Col,
+  Row,
+  InputGroup,
+  InputGroupAddon
+} from 'reactstrap'
 import Header from './components/Header'
-import NotesListContainer from './containers/NotesList'
+import MessagesListContainer from './containers/MessagesList'
 import req from 'request'
+import routes from './api-routes'
 
 class Home extends Component {
   constructor (props) {
     super(props)
 
     this.state = {
-      showNoteModal: false,
-      note: {
-        title: '',
+      showMessageModal: false,
+      message: {
         id: null,
-        description: ''
+        content: 'Ola',
+        toWhom: '11970',
+        hour: '3',
+        isActive: true,
+        gifTag: 'rrr'
       },
       shouldFetchAgain: false,
       updateNote: undefined
@@ -25,57 +43,74 @@ class Home extends Component {
       description: ''
     }
 
-    this.toggleNoteClick = this.toggleNoteClick.bind(this)
-    this.handleNoteRequest = this.handleNoteRequest.bind(this)
+    this.toggleMessageClick = this.toggleMessageClick.bind(this)
+    this.handleMessageRequest = this.handleMessageRequest.bind(this)
     this.handleUpdate = this.handleUpdate.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
   }
 
-  toggleNoteClick () {
-    const on = this.state.showNoteModal
+  toggleMessageClick () {
+    const on = this.state.showMessageModal
     const rawNote = {
       title: '',
       id: null,
       description: ''
     }
-    this.setState({ showNoteModal: !on, note: rawNote })
+    this.setState({ showMessageModal: !on, note: rawNote })
   }
 
-    /**
-     * Cria ou atualiza uma nota
-     */
-  handleNoteRequest () {
-    if (this.state.note.title.length === 0) {
-      alert('Coloque um título')
+  handleMessageRequest () {
+    // Validations
+    if (this.state.message.content.length === 0) {
+      alert('Coloque um conteúdo')
       return
     }
 
-    let isUpdating = this.state.note.id !== null
-    let url = 'http://localhost:8080/Keepy/create-note'
+    if (this.state.message.toWhom.length === 0) {
+      alert('Coloque um telefone de envio')
+      return
+    }
+
+    if (this.state.message.hour.length === 0) {
+      alert('Coloque um horário de envio')
+      return
+    }
+
+    let isUpdating = this.state.message.id !== null
+    let url = routes.postMessage
+
+    const message = this.state.message
 
     const form = {
-      title: this.state.note.title,
-      description: this.state.note.description,
-      user_id: this.props.userId
+      content: message.content,
+      toWhom: message.toWhom,
+      user_id: this.props.userId,
+      hour: message.hour,
+      gifTag: message.gifTag,
+      is_active: message.isActive
     }
 
     if (isUpdating) {
       form.id = this.state.note.id
-      url = 'http://localhost:8080/Keepy/update-note'
+      url = routes.postMessage + '/' + form.id
     }
 
-    const rawNote = {
-      title: '',
+    const rawMessage = {
       id: null,
-      description: ''
+      content: '',
+      toWhom: '',
+      hour: '',
+      isActive: true,
+      gifTag: ''
     }
 
+    console.log(url, form)
     req.post({
       url,
       form
     }, (err, httpResponse, body) => {
       if (body) {
-        this.setState({ shouldFetchAgain: true, showNoteModal: false, note: rawNote })
+        this.setState({ shouldFetchAgain: true, showMessageModal: false, message: rawMessage })
       }
     })
   }
@@ -83,7 +118,7 @@ class Home extends Component {
   handleUpdate (note) {
     const { title, id, description } = note
     this.setState({
-      showNoteModal: true,
+      showMessageModal: true,
       note: {
         title,
         id,
@@ -102,60 +137,104 @@ class Home extends Component {
       form
     }, (err, httpResponse, body) => {
       if (body) {
-        this.setState({ shouldFetchAgain: true, showNoteModal: false })
+        this.setState({ shouldFetchAgain: true, showMessageModal: false })
       }
     })
   }
 
   render () {
-    const handleTitleChange = (el) => {
-      const note = this.state.note
-      note.title = el.target.value
-      this.setState({ note })
+    const handleMessageChange = (el, type) => {
+      const message = this.state.message
+      message[type] = el.target.value
+      this.setState({ message })
     }
-    const handleDescriptionChange = (el) => {
-      const note = this.state.note
-      note.description = el.target.value
-      this.setState({ note })
+
+    const handleNumberChange = (number, type) => {
+      if (!Number(number)) {
+        return
+      }
+      const message = this.state.message
+      message[type] = number
+      this.setState({ message })
     }
 
     return (
       <div>
 
-        <Header newNoteClick={this.toggleNoteClick} />
-        <NotesListContainer
+        <Header newNoteClick={this.toggleMessageClick} />
+        <MessagesListContainer
           shouldFetchAgain={this.state.shouldFetchAgain}
           handleUpdate={this.handleUpdate}
           handleDelete={this.handleDelete}
           userId={this.props.userId}
         />
 
-        <Modal isOpen={this.state.showNoteModal} toggle={this.toggleNoteClick} className={this.props.className}>
-          <ModalHeader toggle={this.toggle}>Nova Nota</ModalHeader>
+        <Modal isOpen={this.state.showMessageModal} toggle={this.toggleMessageClick} className={this.props.className}>
+          <ModalHeader toggle={this.toggle}>Novo Bom Dia</ModalHeader>
           <ModalBody>
             <Form onSubmit={e => e.preventDefault()}>
               <FormGroup>
-                <Label for='noteTitle'>Título</Label>
-                <Input type='text' name='title' id='noteTitle' placeholder='obrigatório'
-                  defaultValue={this.state.note.title}
-                  onChange={handleTitleChange}
-                                />
+                <Input type='textarea' placeholder='mensagem'
+                  value={this.state.message.content}
+                  onChange={(el) => handleMessageChange(el, 'content')}
+                />
               </FormGroup>
 
-              <FormGroup>
-                <Label for='noteTitle'>Descrição</Label>
-                <Input type='textarea' name='description' id='noteTitle' placeholder='obrigatório'
-                  defaultValue={this.state.note.description}
-                  onChange={handleDescriptionChange}
-                                />
-              </FormGroup>
+              <Row>
+                <Col xs={6}>
+                  <FormGroup>
+                    <Input type='text' placeholder='para quem? (tel + DDD)'
+                      value={this.state.message.toWhom}
+                      onChange={(el) => handleNumberChange(el.target.value, 'toWhom')}
+                    />
+                  </FormGroup>
 
+                </Col>
+
+                <Col xs={6}>
+                  <FormGroup>
+                    <Input type='text' placeholder='hora de envio (ex: 9)'
+                      value={this.state.message.hour}
+                      onChange={(el) => handleNumberChange(el.target.value, 'hour')}
+                    />
+                  </FormGroup>
+
+                </Col>
+              </Row>
+
+              <Row>
+                <Col xs={6}>
+                  <Label>Enviar com gif aleatório?</Label>
+                  <InputGroup>
+                    <InputGroupAddon>#</InputGroupAddon>
+                    <Input
+                      placeholder='tema do gif'
+                      value={this.state.message.gifTag}
+                      onChange={
+                      (el) => handleMessageChange(el, 'gifTag')
+                    }
+                  />
+                  </InputGroup>
+                </Col>
+
+                { this.state.message.id
+                  ? <Col xs={6}>
+                    <FormGroup check>
+                      <Label check>
+                        <Input type='checkbox' checked={this.state.message.isActive} />{' '}
+                    Desmarque caso queira desativar o bom dia
+                  </Label>
+                    </FormGroup>
+                  </Col>
+                : ''
+                }
+              </Row>
             </Form>
 
           </ModalBody>
           <ModalFooter>
-            <Button color='primary' onClick={this.handleNoteRequest}>Adicionar</Button>
-            <Button color='secondary' onClick={this.toggleNoteClick}>Cancelar</Button>
+            <Button color='secondary' onClick={this.toggleMessageClick}>Cancelar</Button>
+            <Button color='success' onClick={this.handleMessageRequest}>Criar Bom Dia</Button>
           </ModalFooter>
         </Modal>
 

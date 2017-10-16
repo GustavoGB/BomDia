@@ -9,7 +9,7 @@ class App extends Component {
     this.state = {
       name: 'marcelo',
       password: '123456',
-      newAccount: true,
+      newAccount: false,
       phone: '970691356'
 
     }
@@ -23,7 +23,7 @@ class App extends Component {
     }
 
     const data = {
-      name: this.state.name,
+      phone: this.state.phone,
       password: this.state.password
     }
 
@@ -101,8 +101,8 @@ class App extends Component {
           </a>
         </div>
 
-        <Input type='text' placeholder='Usuário' value={this.state.name}
-          onChange={e => this.setState({ name: e.target.value })} />
+        <Input type='text' placeholder='Telefone' value={this.state.phone}
+          onChange={e => this.setState({ phone: e.target.value })} />
         <Input type='password' placeholder='Senha' value={this.state.password}
           onChange={e => this.setState({ password: e.target.value })} />
 

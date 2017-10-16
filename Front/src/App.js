@@ -20,15 +20,18 @@ class App extends Component {
   handleLogin (form) {
     req.post({
       url: routes.login,
-      form
+      json: form
     }, (err, httpResponse, body) => {
-      if (body) {
-        body = JSON.parse(body)
-        if (body.status === 'error') {
-          this.setState({ invalidLogin: true })
-        } else {
-          this.setState({ userId: body.user_id })
-        }
+      if (err) {
+        return alert(err)
+      } else if (body.id) {
+        this.setState({
+          userId: body.id
+        })
+      } else {
+        this.setState({
+          invalidLogin: true
+        })
       }
     })
   }

@@ -5,6 +5,7 @@ public class Message {
 	private Integer userId;
 	private String content;
 	private String toWhom;
+	private String gifTag;
 	private Integer hour;
 	private Integer isActive;
 	private Integer isDeleted;
@@ -29,5 +30,11 @@ public class Message {
 	
 	public Integer getIsDeleted() {return isDeleted;}	
 	public void setIsDeleted(Integer isDeleted) {this.isDeleted = isDeleted;}
+	public String getGifTag() {
+		return gifTag;
+	}
+	public void setGifTag(String gifTag) {
+		this.gifTag = gifTag;
+	}
 
 }

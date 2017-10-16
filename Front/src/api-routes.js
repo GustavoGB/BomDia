@@ -2,7 +2,9 @@ const root = 'http://localhost:8080/bomdia'
 
 const routes = {
   login: root + '/login',
-  createAccount: root + '/user'
+  createAccount: root + '/user',
+  getMessages: root + '/messages',
+  postMessage: root + '/messages'
 }
 
 export default routes

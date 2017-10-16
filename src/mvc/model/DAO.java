@@ -56,7 +56,6 @@ public class DAO {
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				queryUser.setId(rs.getInt("id"));
-				queryUser.setPhone(rs.getString("phone"));
 			}
 			rs.close();
 			stmt.close();
@@ -76,8 +75,8 @@ public class DAO {
 			stmt.setString(2, message.getContent());
 			stmt.setString(3,message.getToWhom());
 			stmt.setInt(4,message.getHour());
-			stmt.setInt(5, message.getIsActive());
-			stmt.setInt(6, message.getIsDeleted());
+			stmt.setInt(5, 1);
+			stmt.setInt(6, 0);
 					
 			stmt.execute();
 			stmt.close();
@@ -110,11 +109,12 @@ public class DAO {
 	public List<Message> getList(User user) {
 		 List<Message> messages = new ArrayList<Message>();
 		 try {
-			 PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Message WHERE user_id="+ user.getId());
+			 PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Message WHERE user_id="+ user.getId() + " AND is_deleted=0");
 			 ResultSet rs = stmt.executeQuery();
 		 while (rs.next()) {
 			 Message message = new Message();
 			 message.setId(rs.getInt("id"));
+			 message.setUserId(rs.getInt("user_id"));
 			 message.setContent(rs.getString("content"));
 			 message.setToWhom(rs.getString("towhom"));
 			 message.setHour(rs.getInt("hour"));
@@ -130,10 +130,10 @@ public class DAO {
 		 return messages;
 	}
 	
-	public List<Message> getList(Message message) {
+	public List<Message> getHourlyList(Integer hour) {
 		 List<Message> messages = new ArrayList<Message>();
 		 try {
-			 PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Message WHERE hour="+ message.getHour());
+			 PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Message WHERE hour="+ hour);
 			 ResultSet rs = stmt.executeQuery();
 		 while (rs.next()) {
 			 
