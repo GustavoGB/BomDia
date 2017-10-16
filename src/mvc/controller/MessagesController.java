@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import mvc.model.DAO;
 import mvc.model.Message;
 import mvc.model.User;
+import mvc.controller.GifController;
 
 @RestController
 @CrossOrigin
@@ -34,13 +35,12 @@ public class MessagesController {
     public String update(@RequestBody Message msg) {
     	mvc.model.DAO dao = new DAO();
     	
-    	System.out.println(msg.getGifTag());
+    	if (msg.getGifTag() != null) {
+    		String gifUrl = new GifController().Random(msg.getGifTag());
+    		msg.setContent(msg.getContent() + " " + gifUrl);
+    	};
     	
     	dao.addMessage(msg);
-    	
-        
-        // TODO: call persistence layer to update
-        
         return "{\"ok\":true}";
     }
 }

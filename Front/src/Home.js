@@ -84,10 +84,10 @@ class Home extends Component {
     const form = {
       content: message.content,
       toWhom: message.toWhom,
-      user_id: this.props.userId,
+      userId: this.props.userId,
       hour: message.hour,
       gifTag: message.gifTag,
-      is_active: message.isActive
+      isActive: message.isActive ? 1 : 0
     }
 
     if (isUpdating) {
@@ -104,13 +104,15 @@ class Home extends Component {
       gifTag: ''
     }
 
-    console.log(url, form)
     req.post({
       url,
-      form
+      json: form
     }, (err, httpResponse, body) => {
       if (body) {
-        this.setState({ shouldFetchAgain: true, showMessageModal: false, message: rawMessage })
+        console.log(body)
+        if (body.ok) {
+          this.setState({ shouldFetchAgain: true, showMessageModal: false, message: rawMessage })
+        }
       }
     })
   }
@@ -146,7 +148,7 @@ class Home extends Component {
     const handleMessageChange = (el, type) => {
       const message = this.state.message
       message[type] = el.target.value
-      this.setState({ message })
+      this.setState({ ...this.state, message })
     }
 
     const handleNumberChange = (number, type) => {
@@ -155,7 +157,7 @@ class Home extends Component {
       }
       const message = this.state.message
       message[type] = number
-      this.setState({ message })
+      this.setState({ ...this.state, message })
     }
 
     return (

@@ -4,9 +4,13 @@ import { Button, Row, Col } from 'reactstrap'
 import './MessagesList.css'
 
 class MessagesList extends Component {
-  constructor (props) {
-    super(props)
+  formatLink (content) {
+    var urlRegex = /(https?:\/\/[^\s]+)/g
+    return content.replace(urlRegex, function (url) {
+      return <a href="' + url + '"> + url + </a>
+    })
   }
+
   render () {
     if (this.props.messages.length === 0) {
       return (<h4>Nenhuma mensagem encontrada. Crie uma clicando no botão verde acima </h4>)
@@ -14,23 +18,6 @@ class MessagesList extends Component {
 
     return (
       <Row>
-        <Col xs={6}>
-          <div className='message-container'>
-            <div className='message-hour'>
-              <i className='fa fa-clock-o' aria-hidden='true' /> 9h
-            </div>
-
-            <p className='message-content'>
-              Bom dia flor do dia! Que seu dia seja regado de notícias boas. Deus é fiel.
-            </p>
-
-            <div className='message-status'>
-              <i className='fa fa-check-square' aria-hidden='true' />
-            </div>
-
-          </div>
-        </Col>
-
         { this.props.messages.map(message => (
           <Col xs={6} key={message.id}>
             <div className='message-container'>
@@ -38,7 +25,7 @@ class MessagesList extends Component {
                 <i className='fa fa-clock-o' aria-hidden='true' /> {message.hour}
               </div>
 
-              <p className='message-content'> {message.content} </p>
+              <p className='message-content'>{(message.content)} </p>
 
               <div className='message-status'>
                 <i className='fa fa-check-square' aria-hidden='true' />
