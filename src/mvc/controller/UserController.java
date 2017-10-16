@@ -1,20 +1,15 @@
 package mvc.controller;
-import java.io.StringWriter;
-
-import org.json.JSONObject;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import
 org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 
+
+import mvc.model.DAO;
 import mvc.model.User;
 
 @RestController
@@ -33,10 +28,13 @@ public class UserController {
     
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<User> update(@RequestBody User user) {
-        if (user != null) {
-            user.setId(1);
+    	mvc.model.DAO dao = new DAO();
+    	Integer key = dao.addUser(user);
+    	
+        if (key!= null) {
+            user.setId(key);
         }
-
+        
         // TODO: call persistence layer to update
         
         return new ResponseEntity<User>(user, HttpStatus.OK);

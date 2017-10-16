@@ -43,7 +43,6 @@ class App extends Component {
       } else if (body.id) {
         this.setState({ userId: body.id })
       } else {
-        console.log(body)
         this.setState({ invalidLogin: true })
       }
     })

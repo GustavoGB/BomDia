@@ -8,30 +8,39 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mysql.jdbc.Statement;
+
 public class DAO {
 	private Connection connection = null;
 
 	public DAO() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			connection = DriverManager.getConnection("jdbc:mysql://localhost/bom_dia", "root", "07061997");
+			connection = DriverManager.getConnection("jdbc:mysql://localhost/bom_dia", "root", "lhbDtN5Ee3JPnm2AedHr");
 		} catch (SQLException | ClassNotFoundException e)
 		{e.printStackTrace();}
 	}
 	
-	public void addUser(User user){
+	public Integer addUser(User user){
 		try {
 //			alterar aqui se colocar foto de perfil
-			String sql = "INSERT INTO User (phone, password, name), values(?,?,?)";
-			PreparedStatement stmt = connection.prepareStatement(sql);
+			String sql = "INSERT INTO User (phone, password, name) VALUES (?,?,?)";
+			PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			stmt.setString(1,user.getPhone());
 			stmt.setString(2,user.getPassword());
 //			stmt.setString(3,user.getProfilePicture());
 			stmt.setString(3,user.getName());
-			
 			stmt.execute();
+				
+			ResultSet rs = stmt.getGeneratedKeys();
+			rs.next();
+			Integer key = rs.getInt(1);
 			stmt.close();
+			
+			
+			return key;
 		} catch (SQLException e) {e.printStackTrace();}
+		return null;
 	}
 	
 	public User get(User user) {
@@ -61,7 +70,7 @@ public class DAO {
 	
 	public void addMessage(Message message){
 		try {
-			String sql = "INSERT INTO Message (user_id, content, towhom, hour, is_active, is_deleted), values(?,?,?,?,?,?)";
+			String sql = "INSERT INTO Message (user_id, content, towhom, hour, is_active, is_deleted) VALUES (?,?,?,?,?,?)";
 			PreparedStatement stmt = connection.prepareStatement(sql);
 			stmt.setInt(1, message.getUserId());
 			stmt.setString(2, message.getContent());
