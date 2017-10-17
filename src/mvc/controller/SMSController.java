@@ -17,6 +17,7 @@ public class SMSController {
 	  }
 	  
 	public String SendSMS(String to, String content) {
+		System.out.println("Sending: " + content);
 		Message message = Message.creator(new PhoneNumber("+55" + to),
 		        new PhoneNumber("+12566935667"), content).create();
 		    return message.getSid();

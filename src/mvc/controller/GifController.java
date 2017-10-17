@@ -23,7 +23,7 @@ public class GifController {
 			JSONObject myObj = jsonResponse.getBody().getObject();
 
 			// extract data.url from the response
-			String msg = myObj.getJSONObject("data").getString("url");
+			String msg = myObj.getJSONObject("data").getString("image_url");
 			return msg;
 		} catch (UnirestException e) {
 			e.printStackTrace();

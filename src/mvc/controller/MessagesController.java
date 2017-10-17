@@ -1,5 +1,6 @@
 package mvc.controller;
 import java.util.List;
+import mvc.controller.HourlySMS;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +17,14 @@ import mvc.model.DAO;
 import mvc.model.Message;
 import mvc.model.User;
 import mvc.controller.GifController;
+import mvc.controller.HourlySMS;
 
 @RestController
 @CrossOrigin
 @RequestMapping(value = "/messages")
 public class MessagesController {
+	HourlySMS cronJob = new HourlySMS();
+	
     @RequestMapping(method = RequestMethod.GET)
     public List<Message> get(@RequestParam(value = "user_id") Integer userId) {
     	mvc.model.DAO dao = new DAO();
@@ -28,6 +32,7 @@ public class MessagesController {
     	user.setId(userId);
         List<Message> messages = dao.getList(user);
         
+        cronJob.RunsThreadIfNecessary();
         return messages;
     }
     
@@ -41,6 +46,9 @@ public class MessagesController {
     	};
     	
     	dao.addMessage(msg);
+    	
+    	cronJob.RunsThreadIfNecessary();
+    	
         return "{\"ok\":true}";
     }
     
@@ -55,6 +63,8 @@ public class MessagesController {
     	};
     	
     	dao.alteraMessage(msg);
+    	cronJob.RunsThreadIfNecessary();
+    	
         return "{\"ok\":true}";
     }
     
@@ -63,7 +73,7 @@ public class MessagesController {
     	mvc.model.DAO dao = new DAO();
     	
     	dao.removeMessage(msg);
-   
+    	cronJob.RunsThreadIfNecessary();
         return "{\"ok\":true}";
     }
     
