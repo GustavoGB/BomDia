@@ -25,7 +25,6 @@ public class LoginController {
         if (loggedUser!= null) {
         	return new ResponseEntity<User>(loggedUser, HttpStatus.OK);
         }
-        
         return new ResponseEntity<User>(loggedUser, HttpStatus.BAD_REQUEST);       
     }
 }

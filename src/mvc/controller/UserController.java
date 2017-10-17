@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import mvc.model.DAO;
 import mvc.model.User;
 
@@ -27,7 +26,8 @@ public class UserController {
             user.setId(key);
         }
         
-        // TODO: call persistence layer to update
+        
+        
         
         return new ResponseEntity<User>(user, HttpStatus.OK);
     }    

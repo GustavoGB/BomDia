@@ -150,7 +150,7 @@ public class DAO {
 	public List<Message> getHourlyList(Integer hour) {
 		 List<Message> messages = new ArrayList<Message>();
 		 try {
-			 PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Message WHERE hour="+ hour);
+			 PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Message WHERE hour="+ hour + " AND is_deleted=0");
 			 ResultSet rs = stmt.executeQuery();
 		 while (rs.next()) {
 			 
