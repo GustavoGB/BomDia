@@ -11,6 +11,10 @@ CREATE TABLE User (
  PRIMARY KEY (id)
 );
 ```
+```
+ALTER TABLE User MODIFY profile_picture VARCHAR(120);
+```
+
 ```sql
 INSERT INTO User(phone,password, profile_picture, name) VALUES ("5511970691356","teste", "blooooob", "Marcelo");
 ```
