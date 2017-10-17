@@ -85,8 +85,9 @@ public class DAO {
 	
 	public void removeMessage(Message message) {
 		 try {
-		 PreparedStatement stmt = connection.prepareStatement("DELETE FROM Message WHERE id=?");
-		 stmt.setInt(1, message.getId());
+		 PreparedStatement stmt = connection.prepareStatement("UPDATE Message SET is_deleted=? WHERE id=?");
+		 stmt.setInt(1, 1);
+		 stmt.setInt(2, message.getId());
 		 stmt.execute();
 		 stmt.close();
 		 } catch(SQLException e) {System.out.println(e);}

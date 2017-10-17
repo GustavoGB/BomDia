@@ -106,14 +106,12 @@ class Home extends Component {
     }
 
     console.log(form)
-    
 
     req.post({
       url,
       json: form
     }, (err, httpResponse, body) => {
       if (body) {
-        console.log(body)
         if (body.ok) {
           this.setState({ shouldFetchAgain: true, showMessageModal: false, message: rawMessage })
         }
@@ -141,11 +139,11 @@ class Home extends Component {
       id: note.id
     }
 
-    req.post({
-      url: 'http://localhost:8080/Keepy/delete-note',
-      form
+    req.delete({
+      url: `${routes.postMessage}/${note.id}`,
+      json: form
     }, (err, httpResponse, body) => {
-      if (body) {
+      if (body.ok) {
         this.setState({ shouldFetchAgain: true, showMessageModal: false })
       }
     })
@@ -159,11 +157,17 @@ class Home extends Component {
     }
 
     const handleNumberChange = (number, type) => {
-      if (!Number(number)) {
+      if (!Number(number) && number.length > 0) {
         return
       }
       const message = this.state.message
       message[type] = number
+      this.setState({ ...this.state, message })
+    }
+
+    const handleIsActiveChange = () => {
+      const message = this.state.message
+      message.isActive = !this.state.message.isActive
       this.setState({ ...this.state, message })
     }
 
@@ -230,8 +234,10 @@ class Home extends Component {
                   ? <Col xs={6}>
                     <FormGroup check>
                       <Label check>
-                        <Input type='checkbox' checked={this.state.message.isActive} />{' '}
-                    Desmarque caso queira desativar o bom dia
+                        <Input type='checkbox' checked={this.state.message.isActive}
+                          onChange={handleIsActiveChange}
+                         />{' '}
+                    Ativo?
                   </Label>
                     </FormGroup>
                   </Col>

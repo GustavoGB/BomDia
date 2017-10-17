@@ -58,5 +58,14 @@ public class MessagesController {
         return "{\"ok\":true}";
     }
     
+    @RequestMapping(method = RequestMethod.DELETE, value="/{messageId}" )
+    public String delete(@RequestBody Message msg) {
+    	mvc.model.DAO dao = new DAO();
+    	
+    	dao.removeMessage(msg);
+   
+        return "{\"ok\":true}";
+    }
+    
     
 }

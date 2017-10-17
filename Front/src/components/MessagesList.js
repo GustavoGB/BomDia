@@ -28,7 +28,9 @@ class MessagesList extends Component {
               <p className='message-content'>{(message.content)} </p>
 
               <div className='message-status'>
-                <i className='fa fa-check-square' aria-hidden='true' />
+                { message.isActive
+                ? <i className='fa fa-check-square' aria-hidden='true' /> : ''
+                }
               </div>
 
               <div className='message-footer'>
