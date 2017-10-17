@@ -15,7 +15,7 @@ public class GifController {
 		try {
 			jsonResponse = Unirest.get("https://api.giphy.com/v1/gifs/random")
 					  .header("accept", "application/json")
-					  .queryString("api_key", "Wo19YCgoUKvwTL13iOUGk996jNJalLOd")
+					  .queryString("api_key", API_KEY)
 					  .queryString("tag", tag)
 					  .asJson();
 			

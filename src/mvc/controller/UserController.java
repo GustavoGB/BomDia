@@ -16,16 +16,6 @@ import mvc.model.User;
 @CrossOrigin
 @RequestMapping(value = "/user")
 public class UserController {
-    @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<User> get() {
-
-        User user = new User();
-        user.setName("Lel22222o");
-        user.setPhone("1197069512");
-        user.setPassword("123456");
-        return new ResponseEntity<User>(user, HttpStatus.OK);
-    }
-    
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<User> update(@RequestBody User user) {
     	mvc.model.DAO dao = new DAO();
