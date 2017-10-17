@@ -1,10 +1,5 @@
 package mvc.model;
 
-import java.io.*;
-import java.io.File;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.sql.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,7 +8,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.web.multipart.MultipartFile;
 
 import com.mysql.jdbc.Statement;
 
@@ -28,17 +22,7 @@ public class DAO {
 		{e.printStackTrace();}
 	}
 	
-	public Integer addUser(User user) throws IOException {
-		MultipartFile filePart = user.getProfilePicture();
-		// Rotina para salvar o arquivo no servidor
-		if (!filePart.isEmpty()) {
-			String fileName = filePart.getOriginalFilename();
-			File uploads = new File("/tmp");
-			File file = new File(uploads, fileName);
-			try (InputStream input = filePart.getInputStream()) {
-				Files.copy(input, file.toPath());
-			}	
-		}
+	public Integer addUser(User user) {
 		 
 		try {
 			String sql = "INSERT INTO User (phone, password, name, profile_picture) VALUES (?,?,?,?)";
@@ -46,7 +30,7 @@ public class DAO {
 			stmt.setString(1,user.getPhone());
 			stmt.setString(2,user.getPassword());
 			stmt.setString(3,user.getName());
-			stmt.setBinaryStream(4,filePart.getInputStream());
+			stmt.setString(4,user.getProfilePicture());
 			stmt.execute();
 				
 			ResultSet rs = stmt.getGeneratedKeys();
@@ -58,6 +42,19 @@ public class DAO {
 			return key;
 		} catch (SQLException e) {e.printStackTrace();}
 		return null;
+	}
+	
+	public void alteraUser(User user) {
+		 try {
+			 String sql = "UPDATE User SET phone=?, password=?, name=?, profile_picture=? WHERE id=?";
+			 PreparedStatement stmt = connection.prepareStatement(sql);
+			 stmt.setString(1, user.getPhone());
+			 stmt.setString(2, user.getPassword());
+			 stmt.setString(3, user.getName());
+			 stmt.setString(4, user.getProfilePicture());
+			 stmt.executeUpdate();
+			 stmt.close();
+			 } catch(SQLException e) {System.out.println(e);}
 	}
 	
 	public User get(User user) {
@@ -84,21 +81,6 @@ public class DAO {
 		return queryUser;
 	}
 	
-	public byte[] buscaFoto(String phone) {
-		byte[] imgData = null;
-		try {
-			PreparedStatement stmt = connection.prepareStatement("SELECT * FROM User WHERE phone=? ");
-			stmt.setString(1, phone);
-			ResultSet rs = stmt.executeQuery();
-			if(rs.next()) {
-				Blob image = rs.getBlob("profile_picture");
-				imgData = image.getBytes(1, (int) image.length());
-		 }
-		 rs.close();
-		 stmt.close();
-		 } catch(SQLException e) {System.out.println(e);}
-		 return imgData;
-		 }
 	
 	public void addMessage(Message message){
 		try {
