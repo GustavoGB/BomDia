@@ -1,5 +1,10 @@
 package mvc.model;
 
+import java.io.*;
+import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.sql.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,6 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mysql.jdbc.Statement;
 
@@ -16,20 +23,30 @@ public class DAO {
 	public DAO() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			connection = DriverManager.getConnection("jdbc:mysql://localhost/bom_dia", "root", "lhbDtN5Ee3JPnm2AedHr");
+			connection = DriverManager.getConnection("jdbc:mysql://localhost/bom_dia", "root", "07061997");
 		} catch (SQLException | ClassNotFoundException e)
 		{e.printStackTrace();}
 	}
 	
-	public Integer addUser(User user){
+	public Integer addUser(User user) throws IOException {
+		MultipartFile filePart = user.getProfilePicture();
+		// Rotina para salvar o arquivo no servidor
+		if (!filePart.isEmpty()) {
+			String fileName = filePart.getOriginalFilename();
+			File uploads = new File("/tmp");
+			File file = new File(uploads, fileName);
+			try (InputStream input = filePart.getInputStream()) {
+				Files.copy(input, file.toPath());
+			}	
+		}
+		 
 		try {
-//			alterar aqui se colocar foto de perfil
-			String sql = "INSERT INTO User (phone, password, name) VALUES (?,?,?)";
+			String sql = "INSERT INTO User (phone, password, name, profile_picture) VALUES (?,?,?,?)";
 			PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			stmt.setString(1,user.getPhone());
 			stmt.setString(2,user.getPassword());
-//			stmt.setString(3,user.getProfilePicture());
 			stmt.setString(3,user.getName());
+			stmt.setBinaryStream(4,filePart.getInputStream());
 			stmt.execute();
 				
 			ResultSet rs = stmt.getGeneratedKeys();
@@ -66,6 +83,22 @@ public class DAO {
 		
 		return queryUser;
 	}
+	
+	public byte[] buscaFoto(String phone) {
+		byte[] imgData = null;
+		try {
+			PreparedStatement stmt = connection.prepareStatement("SELECT * FROM User WHERE phone=? ");
+			stmt.setString(1, phone);
+			ResultSet rs = stmt.executeQuery();
+			if(rs.next()) {
+				Blob image = rs.getBlob("profile_picture");
+				imgData = image.getBytes(1, (int) image.length());
+		 }
+		 rs.close();
+		 stmt.close();
+		 } catch(SQLException e) {System.out.println(e);}
+		 return imgData;
+		 }
 	
 	public void addMessage(Message message){
 		try {
@@ -157,33 +190,7 @@ public class DAO {
 		 } catch(SQLException e) {System.out.println(e);}
 		 return messages;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-	
-	
+		
 	
 	public void close() {
 	 	  try { connection.close();}
