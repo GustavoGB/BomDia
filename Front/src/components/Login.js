@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { Button, Form, Input, Row, Col } from 'reactstrap'
+import { Button, FormGroup, Label, FormText, Form, Input, Row, Col } from 'reactstrap'
+import FileBase64 from 'react-file-base64'
 import './Login.css'
 
 class App extends Component {
@@ -10,7 +11,9 @@ class App extends Component {
       name: 'marcelo',
       password: '123456',
       newAccount: false,
-      phone: '970691356'
+      phone: '970691356',
+      profilePic: undefined,
+      loading: false
 
     }
     this.handleLogin = this.handleLogin.bind(this)
@@ -27,6 +30,9 @@ class App extends Component {
       password: this.state.password
     }
 
+    this.setState({
+      loading: true
+    })
     this.props.handleLogin(data)
   }
 
@@ -38,10 +44,25 @@ class App extends Component {
     const data = {
       name: this.state.name,
       password: this.state.password,
-      phone: this.state.phone
+      phone: this.state.phone,
+      profilePic: this.state.profilePic
     }
 
+    this.setState({
+      loading: true
+    })
+
     this.props.handleNewAccount(data)
+  }
+
+  getProfilePic (data) {
+    const index = data.base64.indexOf('base64,')
+
+    if (index > 0) {
+      this.setState({
+        profilePic: data.base64.substring(index + 7, data.base64.length)
+      })
+    }
   }
 
   render () {
@@ -52,6 +73,8 @@ class App extends Component {
         })
       }
     }
+
+    const isLoading = this.state.loading
 
     if (this.state.newAccount) {
       return (
@@ -72,6 +95,11 @@ class App extends Component {
           <Input type='text' placeholder='Telefone com DDD' value={this.state.phone}
             onChange={handlePhone} />
 
+          <div style={{ marginBottom: '1em' }} />
+          Foto de perfil:
+          <FileBase64
+            onDone={this.getProfilePic.bind(this)} />
+
           {this.props.invalidLogin
             ? <p className='invalid'> <i className='fa fa-exclamation' aria-hidden='true' />
               Login inválido, cheque suas informações
@@ -83,8 +111,8 @@ class App extends Component {
           <Row>
             <Col xs='12'>
               <Button color='primary' size='lg' onClick={this.handleNewAccount} style={{ width: '100%' }}>
-                Nova Conta
-            </Button>
+                {isLoading ? 'Carregando...' : 'Nova Conta'}
+              </Button>
             </Col>
           </Row>
         </Form>
@@ -115,7 +143,7 @@ class App extends Component {
         <Row>
           <Col xs='12'>
             <Button color='success' size='lg' onClick={this.handleLogin} style={{ width: '100%' }}>
-              Entrar
+              {isLoading ? 'Carregando...' : 'Entrar'}
             </Button>
           </Col>
         </Row>

@@ -17,7 +17,7 @@ public class DAO {
 	public DAO() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			connection = DriverManager.getConnection("jdbc:mysql://localhost/bom_dia", "root", "07061997");
+			connection = DriverManager.getConnection("jdbc:mysql://localhost/bom_dia", "root", "lhbDtN5Ee3JPnm2AedHr");
 		} catch (SQLException | ClassNotFoundException e)
 		{e.printStackTrace();}
 	}
@@ -70,6 +70,9 @@ public class DAO {
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				queryUser.setId(rs.getInt("id"));
+				queryUser.setProfilePicture(rs.getString("profile_picture"));
+				queryUser.setName(rs.getString("name"));
+				queryUser.setPhone(rs.getString("phone"));
 			}
 			rs.close();
 			stmt.close();

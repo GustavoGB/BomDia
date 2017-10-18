@@ -18,6 +18,7 @@ import Header from './components/Header'
 import MessagesListContainer from './containers/MessagesList'
 import req from 'request'
 import routes from './api-routes'
+import User from './components/User'
 
 class Home extends Component {
   constructor (props) {
@@ -160,13 +161,21 @@ class Home extends Component {
     return (
       <div>
 
-        <Header newNoteClick={this.toggleMessageClick} />
-        <MessagesListContainer
-          shouldFetchAgain={this.state.shouldFetchAgain}
-          handleUpdate={this.handleUpdate}
-          handleDelete={this.handleDelete}
-          userId={this.props.userId}
-        />
+        <Row>
+          <Col xs={3}>
+
+            <User user={this.props.user} />
+          </Col>
+          <Col xs={9}>
+            <Header newNoteClick={this.toggleMessageClick} />
+            <MessagesListContainer
+              shouldFetchAgain={this.state.shouldFetchAgain}
+              handleUpdate={this.handleUpdate}
+              handleDelete={this.handleDelete}
+              userId={this.props.userId}
+          />
+          </Col>
+        </Row>
 
         <Modal isOpen={this.state.showMessageModal} toggle={this.toggleMessageClick} className={this.props.className}>
           <ModalHeader toggle={this.toggle}>Novo Bom Dia</ModalHeader>

@@ -26,7 +26,7 @@ public class UserController {
             user.setId(key);
         }
         
-        
+        System.out.print(user.getProfilePicture());
         
         
         return new ResponseEntity<User>(user, HttpStatus.OK);

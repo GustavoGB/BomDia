@@ -11,12 +11,14 @@ class App extends Component {
 
     this.state = {
       userId: undefined,
+      user: {},
       invalidLogin: false
     }
 
     this.handleLogin = this.handleLogin.bind(this)
     this.handleNewAccount = this.handleNewAccount.bind(this)
   }
+
   handleLogin (form) {
     req.post({
       url: routes.login,
@@ -26,8 +28,10 @@ class App extends Component {
         return alert(err)
       } else if (body.id) {
         this.setState({
-          userId: body.id
+          userId: body.id,
+          user: body
         })
+        localStorage.setItem('user', JSON.stringify(body))
       } else {
         this.setState({
           invalidLogin: true
@@ -37,21 +41,67 @@ class App extends Component {
   }
 
   handleNewAccount (form) {
-    req.post({
-      url: routes.createAccount,
-      json: form
-    }, (err, httpResponse, body) => {
-      if (err) {
-        return alert(err)
-      } else if (body.id) {
-        this.setState({ userId: body.id })
-      } else {
-        this.setState({ invalidLogin: true })
-      }
-    })
+    if (form.profilePic) {
+      req.post({
+        url: routes.uploadProfilePic,
+        json: { image: form.profilePic },
+        headers: {
+          'Authorization': 'Client-ID c617d0edea36c6f'
+        }
+      }, (err, httpResponse, body) => {
+        if (body.data.link) {
+          const profilePicture = body.data.link
+          const user = {...form, profilePicture}
+          req.post({
+            url: routes.createAccount,
+            json: user
+          }, (err, httpResponse, body) => {
+            if (err) {
+              return alert(err)
+            } else if (body.id) {
+              this.setState({ userId: body.id, user })
+            } else {
+              this.setState({ invalidLogin: true })
+            }
+          })
+        } else {
+          return alert('Houve um problema para fazer o upload da foto de perfil')
+        }
+      })
+    } else {
+      req.post({
+        url: routes.createAccount,
+        json: form
+      }, (err, httpResponse, body) => {
+        if (err) {
+          return alert(err)
+        } else if (body.id) {
+          this.setState({ userId: body.id, user: form})
+        } else {
+          this.setState({ invalidLogin: true })
+        }
+      })
+    }
+  }
+
+  componentWillMount () {
+    const local = JSON.parse(localStorage.getItem('user') || '{}')
+
+    if (local) {
+      this.setState({
+        user: local,
+        userId: local.id
+      })
+    }
   }
 
   render () {
+    const handleLogout = () => {
+      localStorage.setItem('user', '{}')
+      this.setState({
+        userId: undefined
+      })
+    }
     const btnStyle = { position: 'absolute', top: '0.5em', right: '0.5em', color: 'white' }
     return (
       <div className='app-container'>
@@ -60,14 +110,14 @@ class App extends Component {
         </Navbar>
 
         {this.state.userId
-          ? <Button outline style={btnStyle} onClick={() => this.setState({ userId: undefined })}>
-            Sair
+          ? <Button outline style={btnStyle} onClick={handleLogout}>
+              Sair
             </Button> : ''
         }
 
-        <Container>
+        <Container fluid>
           {this.state.userId
-            ? <Home userId={this.state.userId} />
+            ? <Home userId={this.state.userId} user={this.state.user} />
             : <Login handleLogin={this.handleLogin} invalidLogin={this.state.invalidLogin} handleNewAccount={this.handleNewAccount} />
           }
         </Container>
