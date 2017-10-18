@@ -1,7 +1,6 @@
 import { compose } from 'react-komposer'
 import MessagesList from '../components/MessagesList'
 import req from 'request'
-import moment from 'moment'
 import routes from '../api-routes'
 
 function dataLoader (props, onData) {

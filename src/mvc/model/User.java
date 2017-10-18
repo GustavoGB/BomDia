@@ -4,7 +4,7 @@ public class User {
 	private Integer id;
 	private String phone;
 	private String password;
-//	private Blob profilePicture;
+	private String profilePicture;
 	private String name;
 	
 	public Integer getId() {return id;}
@@ -16,8 +16,8 @@ public class User {
 	public String getPassword() {return password;}
 	public void setPassword(String password) {this.password = password;}
 
-//	public Blob getProfilePicture() {return profilePicture;}
-//	public void setProfilePicture(Blob profilePicture) {this.profilePicture = profilePicture;}
+	public String getProfilePicture() {return profilePicture;}
+	public void setProfilePicture(String profilePicture) {this.profilePicture = profilePicture;}
 
 	public String getName() {return name;}
 	public void setName(String name) {this.name = name;}

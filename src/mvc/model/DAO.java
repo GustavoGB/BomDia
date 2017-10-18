@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import com.mysql.jdbc.Statement;
 
 public class DAO {
@@ -16,20 +17,20 @@ public class DAO {
 	public DAO() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			connection = DriverManager.getConnection("jdbc:mysql://localhost/bom_dia", "root", "lhbDtN5Ee3JPnm2AedHr");
+			connection = DriverManager.getConnection("jdbc:mysql://localhost/bom_dia", "root", "07061997");
 		} catch (SQLException | ClassNotFoundException e)
 		{e.printStackTrace();}
 	}
 	
-	public Integer addUser(User user){
+	public Integer addUser(User user) {
+		 
 		try {
-//			alterar aqui se colocar foto de perfil
-			String sql = "INSERT INTO User (phone, password, name) VALUES (?,?,?)";
+			String sql = "INSERT INTO User (phone, password, name, profile_picture) VALUES (?,?,?,?)";
 			PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			stmt.setString(1,user.getPhone());
 			stmt.setString(2,user.getPassword());
-//			stmt.setString(3,user.getProfilePicture());
 			stmt.setString(3,user.getName());
+			stmt.setString(4,user.getProfilePicture());
 			stmt.execute();
 				
 			ResultSet rs = stmt.getGeneratedKeys();
@@ -41,6 +42,19 @@ public class DAO {
 			return key;
 		} catch (SQLException e) {e.printStackTrace();}
 		return null;
+	}
+	
+	public void alteraUser(User user) {
+		 try {
+			 String sql = "UPDATE User SET phone=?, password=?, name=?, profile_picture=? WHERE id=?";
+			 PreparedStatement stmt = connection.prepareStatement(sql);
+			 stmt.setString(1, user.getPhone());
+			 stmt.setString(2, user.getPassword());
+			 stmt.setString(3, user.getName());
+			 stmt.setString(4, user.getProfilePicture());
+			 stmt.executeUpdate();
+			 stmt.close();
+			 } catch(SQLException e) {System.out.println(e);}
 	}
 	
 	public User get(User user) {
@@ -66,6 +80,7 @@ public class DAO {
 		
 		return queryUser;
 	}
+	
 	
 	public void addMessage(Message message){
 		try {
@@ -157,33 +172,7 @@ public class DAO {
 		 } catch(SQLException e) {System.out.println(e);}
 		 return messages;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-	
-	
+		
 	
 	public void close() {
 	 	  try { connection.close();}
