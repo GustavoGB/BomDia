@@ -27,20 +27,13 @@ class Home extends Component {
       showMessageModal: false,
       message: {
         id: null,
-        content: 'Ola',
-        toWhom: '11970',
-        hour: '3',
+        content: '',
+        toWhom: '',
+        hour: '',
         isActive: true,
-        gifTag: 'rrr'
+        gifTag: ''
       },
-      shouldFetchAgain: false,
-      updateNote: undefined
-    }
-
-    this.rawNote = {
-      title: '',
-      id: null,
-      description: ''
+      shouldFetchAgain: false
     }
 
     this.toggleMessageClick = this.toggleMessageClick.bind(this)
@@ -51,12 +44,7 @@ class Home extends Component {
 
   toggleMessageClick () {
     const on = this.state.showMessageModal
-    const rawNote = {
-      title: '',
-      id: null,
-      description: ''
-    }
-    this.setState({ showMessageModal: !on, note: rawNote })
+    this.setState({ showMessageModal: !on })
   }
 
   handleMessageRequest () {
@@ -104,8 +92,6 @@ class Home extends Component {
       isActive: true,
       gifTag: ''
     }
-
-    console.log(form)
 
     req.post({
       url,

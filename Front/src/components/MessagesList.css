@@ -20,17 +20,14 @@
 
 .message-container {
     padding: 1em;
-    border: 1px solid grey;
+    background-color: #F1F6FC;
+    border: 1px solid #A0AAAB;
     border-radius: 0.5em;
     position: relative;
 }
 
 .message-hour {
     display: inline-block;
-}
-
-.message-content {
-    width: 90%;
 }
 
 .message-status {
@@ -48,11 +45,17 @@
     justify-content: space-between;
 }
 
-.message-footer .light {
+.light {
     font-weight: 300;
     margin-right: 5px;
 }
 
-.message-footer .to {
-    font-weight: bold;
+
+.content-gif {
+    margin: 1em 0;
+    width: 100%;
+}
+
+.message-content {
+    font-weight: 500;
 }
